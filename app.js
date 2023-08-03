@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const ejs = require("ejs");
+const mongodb = require("mongodb");
 
 const app = express();
 
@@ -13,7 +14,10 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://ShashwatPandey:Shashwat-123@cluster0.sxsnfpq.mongodb.net/?retryWrites=true&w=majoritytest', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
 
 const itemsSchema = {
   name: String
@@ -54,8 +58,10 @@ app.get("/", async function(req, res) {
     }
   } catch (err) {
     console.log(err);
+    res.status(500).send("An error occurred");
   }
 });
+
 
 app.get("/:customListName", async function(req, res) {
   const customListName = _.capitalize(req.params.customListName);
